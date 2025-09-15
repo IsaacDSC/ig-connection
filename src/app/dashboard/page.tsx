@@ -61,7 +61,7 @@ export default function Dashboard() {
 
   const handleInstagramConnect = () => {
     const redirectUri = getRedirectUri(window.location.origin)
-    const authUrl = buildInstagramAuthUrl(INSTAGRAM_CONFIG.CLIENT_ID, redirectUri)
+    const authUrl = buildInstagramAuthUrl(INSTAGRAM_CONFIG.CLIENT_ID || '', redirectUri)
     window.location.href = authUrl
   }
 

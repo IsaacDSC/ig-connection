@@ -1,17 +1,20 @@
 "use client"
 
+import { v4 as uuidv4 } from 'uuid'
 import { INSTAGRAM_CONFIG, getRedirectUri } from "@/lib/config"
 
 export default function Home() {
   const handleInstagramConnect = () => {
     const redirectUri = getRedirectUri(window.location.origin)
-    const params = new URLSearchParams({
-      force_reauth: "true",
-      client_id: INSTAGRAM_CONFIG.CLIENT_ID,
-      redirect_uri: redirectUri,
-      response_type: "code",
-      scope: INSTAGRAM_CONFIG.SCOPES
-    })
+    const state = uuidv4() // Gera um UUID único para cada tentativa de conexão
+    const params = new URLSearchParams()
+    
+    params.append('force_reauth', 'true')
+    params.append('client_id', INSTAGRAM_CONFIG.CLIENT_ID || '')
+    params.append('redirect_uri', redirectUri)
+    params.append('response_type', 'code')
+    params.append('state', state)
+    params.append('scope', INSTAGRAM_CONFIG.SCOPES)
 
     window.location.href = `${INSTAGRAM_CONFIG.BASE_AUTH_URL}?${params.toString()}`
   }

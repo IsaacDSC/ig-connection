@@ -1,5 +1,6 @@
 import { InstagramSession, InstagramSessionResponse } from '@/types/instagram'
 import { INSTAGRAM_CONFIG } from './config'
+import { v4 as uuidv4 } from 'uuid'
 
 export type { InstagramSession, InstagramSessionResponse }
 
@@ -64,9 +65,9 @@ export function buildInstagramAuthUrl(
     force_reauth: 'true'
   })
 
-  if (state) {
-    params.append('state', state)
-  }
+  // Se não foi fornecido um state, gera um UUID automaticamente
+  const finalState = state || uuidv4()
+  params.append('state', finalState)
 
   return `${INSTAGRAM_CONFIG.BASE_AUTH_URL}?${params.toString()}`
 }

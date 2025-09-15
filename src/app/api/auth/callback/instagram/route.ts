@@ -21,6 +21,18 @@ export async function GET(request: NextRequest) {
     
     console.log('Instagram callback received:', { code, state })
     
+    // Validação básica do state (UUID format)
+    if (state) {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      if (uuidRegex.test(state)) {
+        console.log('✅ State parameter is a valid UUID:', state)
+      } else {
+        console.log('⚠️ State parameter is not a UUID format:', state)
+      }
+    } else {
+      console.log('⚠️ No state parameter received in callback')
+    }
+    
     if (!code) {
       console.error('No code received in callback')
       return NextResponse.json(
@@ -57,7 +69,7 @@ export async function GET(request: NextRequest) {
     
     // Preparar dados para a requisição
     const formData = new URLSearchParams()
-    formData.append('client_id', clientId)
+    formData.append('client_id', clientId || '')
     formData.append('client_secret', clientSecret)
     formData.append('grant_type', 'authorization_code')
     formData.append('redirect_uri', redirectUri)

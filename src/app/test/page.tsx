@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 export default function TestPage() {
   const [result, setResult] = useState<string>('')
@@ -23,8 +24,9 @@ export default function TestPage() {
   const simulateCallback = async () => {
     setLoading(true)
     try {
-      // Simular um redirect direto para testar os cookies
-      window.location.href = '/api/auth/callback/instagram?code=fake_code_for_testing&state=test_state'
+      // Simular um redirect direto para testar os cookies com UUID dinâmico
+      const testState = uuidv4()
+      window.location.href = `/api/auth/callback/instagram?code=fake_code_for_testing&state=${testState}`
     } catch (error) {
       console.error('🧪 Erro na simulação:', error)
       setResult(`Erro: ${error}`)
