@@ -84,6 +84,7 @@ export async function GET(request: NextRequest) {
     console.log('  - Client ID:', clientId)
     console.log('  - Client Secret:', clientSecret)
     console.log('  - Code:', code)
+    console.log('  - TTTTESTEEEEE:', process.env.INSTAGRAM_API_BASE_URL)
     console.log({ formData })
 
     const response = await axios.post<TokenResponse>(tokenURL, formData, {
