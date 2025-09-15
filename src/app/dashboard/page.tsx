@@ -1,9 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import Link from "next/link"
-import { mockVideos } from "@/lib/mockData"
 import { 
   checkInstagramSession, 
   clearInstagramSession, 
@@ -12,27 +10,9 @@ import {
 } from "@/lib/instagram"
 import { useInstagramProfile } from "@/hooks/useInstagramProfile"
 import InstagramProfileCard from "@/components/InstagramProfileCard"
-
-interface InstagramVideo {
-  id: string
-  media_type: string
-  media_url: string
-  thumbnail_url?: string
-  permalink: string
-  caption?: string
-  timestamp: string
-  insights?: {
-    data: Array<{
-      name: string
-      values: Array<{ value: number }>
-    }>
-  }
-}
+import InstagramMediaGrid from "@/components/InstagramMediaGrid"
 
 export default function Dashboard() {
-  const [videos] = useState<InstagramVideo[]>(mockVideos)
-  const [visibleVideos, setVisibleVideos] = useState(6)
-  const [loadingMore, setLoadingMore] = useState(false)
   const [instagramSession, setInstagramSession] = useState<InstagramSession | null>(null)
   const [sessionLoading, setSessionLoading] = useState(true)
   const [sessionError, setSessionError] = useState<string | null>(null)
@@ -90,30 +70,6 @@ export default function Dashboard() {
       setSessionError('Erro ao remover sessão')
     }
   }
-
-  const loadMoreVideos = () => {
-    setLoadingMore(true)
-    setTimeout(() => {
-      setVisibleVideos(prev => Math.min(prev + 6, videos.length))
-      setLoadingMore(false)
-    }, 500)
-  }
-
-  const formatDate = (timestamp: string) => {
-    return new Date(timestamp).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit", 
-      year: "numeric",
-    })
-  }
-
-  const getInsightValue = (video: InstagramVideo, metricName: string) => {
-    const insight = video.insights?.data.find(insight => insight.name === metricName)
-    return insight?.values[0]?.value || 0
-  }
-
-  const displayedVideos = videos.slice(0, visibleVideos)
-  const hasMoreVideos = visibleVideos < videos.length
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -261,91 +217,10 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        ) : null}        {/* Videos Section */}
+        ) : null}        {/* Posts do Instagram */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Vídeos de Demonstração</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayedVideos.map((video) => (
-              <div key={video.id} className="bg-gray-50 rounded-lg overflow-hidden">
-                <div className="aspect-video">
-                  {video.thumbnail_url ? (
-                    <Image
-                      src={video.thumbnail_url}
-                      alt="Video thumbnail"
-                      className="w-full h-full object-cover"
-                      width={400}
-                      height={300}
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <svg
-                        className="w-12 h-12 text-gray-400"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <p className="text-sm text-gray-600 mb-2">
-                    {formatDate(video.timestamp)}
-                  </p>
-                  {video.caption && (
-                    <p className="text-sm text-gray-800 mb-3 line-clamp-3">
-                      {video.caption.length > 100 
-                        ? `${video.caption.substring(0, 100)}...` 
-                        : video.caption}
-                    </p>
-                  )}
-                  
-                  {/* Insights */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Visualizações:</span>
-                      <span className="font-semibold">{getInsightValue(video, "video_views").toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Impressões:</span>
-                      <span className="font-semibold">{getInsightValue(video, "impressions").toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Alcance:</span>
-                      <span className="font-semibold">{getInsightValue(video, "reach").toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Engagement:</span>
-                      <span className="font-semibold">{getInsightValue(video, "engagement").toLocaleString()}</span>
-                    </div>
-                  </div>
-
-                  <a
-                    href={video.permalink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-block w-full text-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition duration-200"
-                  >
-                    Ver Exemplo
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Load More Button */}
-          {hasMoreVideos && (
-            <div className="text-center mt-8">
-              <button
-                onClick={loadMoreVideos}
-                disabled={loadingMore}
-                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition duration-200 disabled:opacity-50"
-              >
-                {loadingMore ? "Carregando..." : "Carregar mais vídeos"}
-              </button>
-            </div>
-          )}
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Posts do Instagram</h3>
+          <InstagramMediaGrid initialVisibleCount={6} />
         </div>
       </div>
     </div>
