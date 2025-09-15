@@ -13,7 +13,6 @@ export const INSTAGRAM_CONFIG = {
 
 export const getRedirectUri = (origin?: string) => {
   return process.env.NEXT_PUBLIC_REDIRECT_URI ||
-    process.env.REDIRECT_URI ||
     `${origin || (typeof window !== 'undefined' ? window.location.origin : '')}/api/auth/callback/instagram`;
 };
 

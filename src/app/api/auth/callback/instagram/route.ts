@@ -18,9 +18,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const code = searchParams.get('code')
     const state = searchParams.get('state')
-    
+
     console.log('Instagram callback received:', { code, state })
-    
+
     // Validação básica do state (UUID format)
     if (state) {
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -32,11 +32,11 @@ export async function GET(request: NextRequest) {
     } else {
       console.log('⚠️ No state parameter received in callback')
     }
-    
+
     if (!code) {
       console.error('No code received in callback')
       return NextResponse.json(
-        { 
+        {
           status: "error",
           message: "Authorization code not received"
         },
@@ -49,14 +49,14 @@ export async function GET(request: NextRequest) {
     const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET
     const redirectUri = getRedirectUri()
 
-    if(!redirectUri) {
+    if (!redirectUri) {
       throw new Error('REDIRECT_URI not configured')
     }
-    
+
     if (!clientSecret) {
       console.error('Instagram client secret not configured')
       return NextResponse.json(
-        { 
+        {
           status: "error",
           message: "Instagram client secret not configured"
         },
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
 
     // URL para trocar código por token
     const tokenURL = INSTAGRAM_CONFIG.TOKEN_URL
-    
+
     // Preparar dados para a requisição
     const formData = new URLSearchParams()
     formData.append('client_id', clientId || '')
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
     // Salvar dados nos cookies de forma segura
     console.log('🍪 Iniciando salvamento dos cookies...')
     const cookieStore = await cookies()
-    
+
     // Configurar cookies com dados do Instagram
     console.log('🍪 Salvando instagram_access_token...')
     cookieStore.set('instagram_access_token', response.data.access_token, {
@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 60, // 60 dias
       path: '/'
     })
-    
+
     console.log('🍪 Salvando instagram_user_id...')
     cookieStore.set('instagram_user_id', response.data.user_id.toString(), {
       httpOnly: true,
@@ -125,37 +125,35 @@ export async function GET(request: NextRequest) {
 
     console.log('✅ Cookies salvos com sucesso!')
 
-    // Definir URL do dashboard
     const dashboardUrl = getDashboardUrl(new URL(request.url).origin)
 
     console.log('🔄 Redirecting to dashboard:', dashboardUrl)
 
-    // Redirecionar para o dashboard
     return NextResponse.redirect(dashboardUrl)
   } catch (error) {
     console.error('❌ Error in Instagram callback:', error)
-    
+
     if (axios.isAxiosError(error)) {
       console.error('Axios error details:')
       console.error('Status:', error.response?.status)
       console.error('Data:', error.response?.data)
-      
+
       if (error.response?.data) {
         const errorData = error.response.data as ErrorResponse
-        console.error('Instagram API Error:', errorData.error, '-', errorData.error_description)
-        
+        console.error('Instagram API Error:', { errorData })
+
         return NextResponse.json(
-          { 
+          {
             status: "error",
-            message: `Instagram API error: ${errorData.error} - ${errorData.error_description}`
+            message: { errorData }
           },
           { status: error.response.status }
         )
       }
     }
-    
+
     return NextResponse.json(
-      { 
+      {
         status: "error",
         message: "Internal server error",
         error: error instanceof Error ? error.message : "Unknown error"
