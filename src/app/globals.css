@@ -1,26 +1,127 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Mercado Livre Color Palette */
+  --ml-yellow: #FFF159;
+  --ml-yellow-light: #FFFF80;
+  --ml-yellow-dark: #E6D850;
+  
+  --ml-blue: #3483FA;
+  --ml-blue-light: #5A9CFF;
+  --ml-blue-dark: #2968C8;
+  
+  --ml-gray-900: #333333;
+  --ml-gray-800: #666666;
+  --ml-gray-700: #999999;
+  --ml-gray-600: #BBBBBB;
+  --ml-gray-500: #CCCCCC;
+  --ml-gray-400: #E6E6E6;
+  --ml-gray-300: #F5F5F5;
+  --ml-gray-200: #FAFAFA;
+  --ml-gray-100: #FFFFFF;
+  
+  --ml-green: #00A650;
+  --ml-green-light: #33B86A;
+  --ml-green-dark: #00873E;
+  
+  --ml-red: #F23D4F;
+  --ml-red-light: #F5616F;
+  --ml-red-dark: #D1242F;
+  
+  --ml-orange: #FF8C00;
+  --ml-orange-light: #FFA533;
+  --ml-orange-dark: #E67300;
+  
+  /* Theme variables */
+  --background: var(--ml-gray-200);
+  --foreground: var(--ml-gray-900);
+  --primary: var(--ml-yellow);
+  --primary-dark: var(--ml-yellow-dark);
+  --secondary: var(--ml-blue);
+  --secondary-dark: var(--ml-blue-dark);
+  --accent: var(--ml-green);
+  --card-background: var(--ml-gray-100);
+  --border: var(--ml-gray-400);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--ml-gray-900);
+    --foreground: var(--ml-gray-100);
+    --card-background: var(--ml-gray-800);
+    --border: var(--ml-gray-700);
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+/* Mercado Livre utility classes */
+.ml-bg-primary {
+  background-color: var(--ml-yellow);
+}
+
+.ml-bg-secondary {
+  background-color: var(--ml-blue);
+}
+
+.ml-bg-accent {
+  background-color: var(--ml-green);
+}
+
+.ml-text-primary {
+  color: var(--ml-yellow);
+}
+
+.ml-text-secondary {
+  color: var(--ml-blue);
+}
+
+.ml-text-accent {
+  color: var(--ml-green);
+}
+
+.ml-border-primary {
+  border-color: var(--ml-yellow);
+}
+
+.ml-border-secondary {
+  border-color: var(--ml-blue);
+}
+
+.ml-gradient-primary {
+  background: linear-gradient(135deg, var(--ml-yellow) 0%, var(--ml-yellow-dark) 100%);
+}
+
+.ml-gradient-secondary {
+  background: linear-gradient(135deg, var(--ml-blue) 0%, var(--ml-blue-dark) 100%);
+}
+
+.ml-shadow-primary {
+  box-shadow: 0 4px 14px 0 rgba(255, 241, 89, 0.3);
+}
+
+.ml-shadow-secondary {
+  box-shadow: 0 4px 14px 0 rgba(52, 131, 250, 0.3);
+}
+
+.ml-hover-primary:hover {
+  background-color: var(--ml-yellow-dark);
+}
+
+.ml-hover-secondary:hover {
+  background-color: var(--ml-blue-dark);
 }

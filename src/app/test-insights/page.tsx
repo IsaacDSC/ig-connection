@@ -67,24 +67,24 @@ export default function TestInsightsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <h1 className="text-2xl font-bold mb-8">🧪 Teste de Insights - Carregando...</h1>
+      <div className="min-h-screen p-8" style={{ backgroundColor: 'var(--ml-gray-200)' }}>
+        <h1 className="text-2xl font-bold mb-8" style={{ color: 'var(--ml-gray-900)' }}>🧪 Teste de Insights - Carregando...</h1>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <h1 className="text-2xl font-bold mb-8">🧪 Teste de Insights - Erro</h1>
-        <p className="text-red-600">{error}</p>
+      <div className="min-h-screen p-8" style={{ backgroundColor: 'var(--ml-gray-200)' }}>
+        <h1 className="text-2xl font-bold mb-8" style={{ color: 'var(--ml-gray-900)' }}>🧪 Teste de Insights - Erro</h1>
+        <p style={{ color: 'var(--ml-red)' }}>{error}</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-2xl font-bold mb-8">🧪 Teste de Insights do Instagram</h1>
+    <div className="min-h-screen p-8" style={{ backgroundColor: 'var(--ml-gray-200)' }}>
+      <h1 className="text-2xl font-bold mb-8" style={{ color: 'var(--ml-gray-900)' }}>🧪 Teste de Insights do Instagram</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {media.map((mediaItem) => (

@@ -15,11 +15,11 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
-      <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+    <div className="min-h-screen flex items-center justify-center ml-gradient-primary">
+      <div className="bg-white rounded-lg ml-shadow-primary p-8 max-w-md w-full mx-4">
         <div className="text-center">
           <div className="mb-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+            <div className="w-20 h-20 ml-gradient-secondary rounded-full mx-auto mb-4 flex items-center justify-center">
               <svg
                 className="w-10 h-10 text-white"
                 fill="currentColor"
@@ -38,7 +38,7 @@ export default function Home() {
             
             <button
               onClick={handleInstagramConnect}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105"
+              className="w-full ml-gradient-secondary ml-hover-secondary text-white font-semibold py-3 px-6 rounded-lg ml-shadow-secondary transition-all duration-300 transform hover:scale-105"
             >
               Conectar com Instagram
             </button>

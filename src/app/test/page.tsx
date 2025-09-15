@@ -40,16 +40,16 @@ export default function TestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen p-8" style={{ backgroundColor: 'var(--ml-gray-200)' }}>
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">🧪 Página de Teste - Instagram</h1>
+        <h1 className="text-3xl font-bold mb-8" style={{ color: 'var(--ml-gray-900)' }}>🧪 Página de Teste - Instagram</h1>
         
         <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Testar API de Sessão</h2>
+          <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--ml-gray-900)' }}>Testar API de Sessão</h2>
           <button
             onClick={testSession}
             disabled={loading}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-4"
+            className="ml-bg-secondary ml-hover-secondary text-white px-4 py-2 rounded mr-4"
           >
             {loading ? 'Testando...' : 'Testar /api/instagram/session'}
           </button>
@@ -57,7 +57,7 @@ export default function TestPage() {
           <button
             onClick={simulateCallback}
             disabled={loading}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+            className="ml-bg-accent text-white px-4 py-2 rounded"
           >
             Simular Callback
           </button>
@@ -70,9 +70,9 @@ export default function TestPage() {
           </div>
         )}
 
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
-          <h3 className="font-semibold text-yellow-800 mb-2">📋 Instruções:</h3>
-          <ol className="list-decimal list-inside text-yellow-700 space-y-1">
+        <div className="rounded-lg p-4 mt-6" style={{ backgroundColor: 'var(--ml-yellow-light)', borderColor: 'var(--ml-yellow-dark)', border: '1px solid' }}>
+          <h3 className="font-semibold mb-2" style={{ color: 'var(--ml-gray-900)' }}>📋 Instruções:</h3>
+          <ol className="list-decimal list-inside space-y-1" style={{ color: 'var(--ml-gray-800)' }}>
             <li>Primeiro, clique em &quot;Testar /api/instagram/session&quot; para ver se a API funciona</li>
             <li>Veja os logs no console do navegador (F12)</li>
             <li>Se necessário, clique em &quot;Simular Callback&quot; para testar o fluxo</li>

@@ -119,9 +119,9 @@ export default function InstagramMediaGrid({ initialVisibleCount = 6 }: Instagra
   if (!authenticated) {
     return (
       <div className="text-center py-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 ml-bg-primary rounded-full mb-4">
           <svg
-            className="w-8 h-8 text-yellow-600"
+            className="w-8 h-8 text-gray-900"
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -299,7 +299,7 @@ export default function InstagramMediaGrid({ initialVisibleCount = 6 }: Instagra
                 href={mediaItem.permalink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block w-full text-center bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-2 px-4 rounded-lg transition duration-200"
+                className="inline-block w-full text-center ml-gradient-secondary ml-hover-secondary text-white py-2 px-4 rounded-lg transition duration-200"
               >
                 Ver no Instagram
               </a>
@@ -314,7 +314,7 @@ export default function InstagramMediaGrid({ initialVisibleCount = 6 }: Instagra
           <button
             onClick={handleLoadMore}
             disabled={loadingMore}
-            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 ml-gradient-secondary ml-hover-secondary text-white rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loadingMore ? "Carregando..." : "Carregar mais posts"}
           </button>

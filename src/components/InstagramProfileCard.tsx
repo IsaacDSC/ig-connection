@@ -26,7 +26,7 @@ export default function InstagramProfileCard({
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-4">
+      <div className="ml-gradient-secondary px-6 py-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white flex items-center">
             <svg
@@ -74,7 +74,7 @@ export default function InstagramProfileCard({
                   src={profile.profile_picture_url}
                   alt={`${profile.username} profile picture`}
                   fill
-                  className="rounded-full object-cover border-4 border-white shadow-lg"
+                  className="rounded-full object-cover border-4 border-white ml-shadow-primary"
                   sizes="(max-width: 768px) 96px, 128px"
                 />
               ) : (
@@ -98,7 +98,7 @@ export default function InstagramProfileCard({
                 {profile.name || profile.username}
               </h3>
               <p className="text-gray-600 text-lg">@{profile.username}</p>
-              <div className="inline-flex items-center px-2 py-1 mt-2 bg-blue-50 text-blue-700 text-sm rounded-full">
+              <div className="inline-flex items-center px-2 py-1 mt-2 bg-blue-50 ml-text-secondary text-sm rounded-full">
                 <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
@@ -122,7 +122,7 @@ export default function InstagramProfileCard({
                   href={profile.website.startsWith('http') ? profile.website : `https://${profile.website}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium"
+                  className="inline-flex items-center ml-text-secondary ml-hover-secondary text-sm font-medium"
                 >
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
