@@ -126,7 +126,7 @@ export async function GET(request: NextRequest) {
 
     console.log('✅ Cookies salvos com sucesso!')
 
-    const dashboardUrl = getDashboardUrl(process.env.INSTAGRAM_API_BASE_URL)
+    const dashboardUrl = getDashboardUrl()
 
     console.log('🔄 Redirecting to dashboard:', dashboardUrl)
 

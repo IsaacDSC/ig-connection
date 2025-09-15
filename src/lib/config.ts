@@ -16,8 +16,6 @@ export const getRedirectUri = (origin?: string) => {
     `${origin || (typeof window !== 'undefined' ? window.location.origin : '')}/api/auth/callback/instagram`;
 };
 
-export const getDashboardUrl = (origin?: string) => {
-  return process.env.NEXT_PUBLIC_AUTH_URL
-    ? `${process.env.NEXT_PUBLIC_AUTH_URL}/dashboard`
-    : `${origin}/dashboard`;
+export const getDashboardUrl = () => {
+  return `${process.env.INSTAGRAM_API_BASE_URL}/dashboard`
 };
