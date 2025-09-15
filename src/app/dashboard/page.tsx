@@ -18,10 +18,8 @@ export default function Dashboard() {
   const [sessionLoading, setSessionLoading] = useState(true)
   const [sessionError, setSessionError] = useState<string | null>(null)
 
-  // Hook para buscar dados do perfil real do Instagram
   const { profile, loading: profileLoading, error: profileError, refetch, authenticated } = useInstagramProfile()
 
-  // Verificar sessão do Instagram
   useEffect(() => {
     const checkSession = async () => {
       try {

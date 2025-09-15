@@ -18,6 +18,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const code = searchParams.get('code')
     const state = searchParams.get('state')
+    const clientId = INSTAGRAM_CONFIG.CLIENT_ID
+    const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET
+    const redirectUri = getRedirectUri()
 
     console.log('Instagram callback received:', { code, state })
 
@@ -45,10 +48,6 @@ export async function GET(request: NextRequest) {
     }
 
     // Configurações do Instagram
-    const clientId = INSTAGRAM_CONFIG.CLIENT_ID
-    const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET
-    const redirectUri = getRedirectUri()
-
     if (!redirectUri) {
       throw new Error('REDIRECT_URI not configured')
     }
@@ -82,14 +81,11 @@ export async function GET(request: NextRequest) {
     console.log('  - Request URL origin:', new URL(request.url).origin)
     console.log('  - Computed redirectUri:', redirectUri)
     console.log('  - Full request URL:', request.url)
-    console.log('Request data:', {
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      grant_type: 'authorization_code',
-      code: code.substring(0, 10) + '...' // Log apenas os primeiros 10 caracteres do código por segurança
-    })
+    console.log('  - Client ID:', clientId)
+    console.log('  - Client Secret:', clientSecret)
+    console.log('  - Code:', code)
+    console.log({ formData })
 
-    // Fazer a requisição para trocar código por token
     const response = await axios.post<TokenResponse>(tokenURL, formData, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
