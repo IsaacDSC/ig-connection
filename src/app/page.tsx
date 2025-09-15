@@ -7,6 +7,14 @@ export default function Home() {
   const handleInstagramConnect = () => {
     const redirectUri = getRedirectUri(window.location.origin)
     const state = uuidv4() // Gera um UUID único para cada tentativa de conexão
+    
+    // Debug: Log da redirect_uri para verificação
+    console.log('🔗 DEBUGGING FRONTEND AUTH REQUEST:')
+    console.log('  - Window origin:', window.location.origin)
+    console.log('  - Environment NEXT_PUBLIC_REDIRECT_URI:', process.env.NEXT_PUBLIC_REDIRECT_URI)
+    console.log('  - Computed redirectUri:', redirectUri)
+    console.log('  - State UUID:', state)
+    
     const params = new URLSearchParams()
     
     params.append('force_reauth', 'true')
@@ -16,7 +24,10 @@ export default function Home() {
     params.append('state', state)
     params.append('scope', INSTAGRAM_CONFIG.SCOPES)
 
-    window.location.href = `${INSTAGRAM_CONFIG.BASE_AUTH_URL}?${params.toString()}`
+    const authUrl = `${INSTAGRAM_CONFIG.BASE_AUTH_URL}?${params.toString()}`
+    console.log('🔗 Full auth URL:', authUrl)
+    
+    window.location.href = authUrl
   }
 
   return (

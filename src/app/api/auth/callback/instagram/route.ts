@@ -77,6 +77,11 @@ export async function GET(request: NextRequest) {
 
     console.log('Exchanging code for token...')
     console.log('Token URL:', tokenURL)
+    console.log('🔍 DEBUGGING REDIRECT URI:')
+    console.log('  - Environment NEXT_PUBLIC_REDIRECT_URI:', process.env.NEXT_PUBLIC_REDIRECT_URI)
+    console.log('  - Request URL origin:', new URL(request.url).origin)
+    console.log('  - Computed redirectUri:', redirectUri)
+    console.log('  - Full request URL:', request.url)
     console.log('Request data:', {
       client_id: clientId,
       redirect_uri: redirectUri,
