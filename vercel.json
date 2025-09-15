@@ -12,6 +12,10 @@
     "NEXTAUTH_SECRET": "@nextauth_secret",
     "INSTAGRAM_CLIENT_ID": "@instagram_client_id",
     "INSTAGRAM_CLIENT_SECRET": "@instagram_client_secret",
-    "INSTAGRAM_API_BASE_URL": "https://graph.instagram.com"
+    "INSTAGRAM_API_BASE_URL": "https://graph.instagram.com",
+    "REDIRECT_URI": "@redirect_uri",
+    "NEXT_PUBLIC_INSTAGRAM_CLIENT_ID": "@next_public_instagram_client_id",
+    "NEXT_PUBLIC_REDIRECT_URI": "@next_public_redirect_uri",
+    "NODE_ENV": "production"
   }
 }

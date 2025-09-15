@@ -64,12 +64,13 @@ export function buildInstagramAuthUrl(
   redirectUri: string,
   state?: string
 ): string {
-  const baseUrl = 'https://api.instagram.com/oauth/authorize'
+  const baseUrl = 'https://www.instagram.com/oauth/authorize'
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
-    scope: 'user_profile,user_media',
-    response_type: 'code'
+    scope: 'instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments,instagram_business_content_publish,instagram_business_manage_insights',
+    response_type: 'code',
+    force_reauth: 'true'
   })
 
   if (state) {

@@ -34,7 +34,11 @@ export async function GET(request: NextRequest) {
     // Configurações do Instagram
     const clientId = process.env.INSTAGRAM_CLIENT_ID || process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID || "742086725267609"
     const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || "https://0190ec42c1ca.ngrok-free.app/api/auth/callback/instagram"
+    const redirectUri = process.env.REDIRECT_URI
+
+    if(!redirectUri) {
+      throw new Error('REDIRECT_URI not configured')
+    }
     
     if (!clientSecret) {
       console.error('Instagram client secret not configured')

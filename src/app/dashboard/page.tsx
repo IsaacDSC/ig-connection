@@ -6,6 +6,7 @@ import {
   checkInstagramSession, 
   clearInstagramSession, 
   formatTokenForDisplay,
+  buildInstagramAuthUrl,
   type InstagramSession 
 } from "@/lib/instagram"
 import { useInstagramProfile } from "@/hooks/useInstagramProfile"
@@ -69,6 +70,18 @@ export default function Dashboard() {
       console.error('Error clearing session:', error)
       setSessionError('Erro ao remover sessão')
     }
+  }
+
+  const handleInstagramConnect = () => {
+    // Configurações do Instagram OAuth
+    const clientId = process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID || "742086725267609"
+    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || `${window.location.origin}/api/auth/callback/instagram`
+    
+    // Construir URL de autorização do Instagram
+    const authUrl = buildInstagramAuthUrl(clientId, redirectUri)
+    
+    // Redirecionar para o Instagram
+    window.location.href = authUrl
   }
 
   return (
@@ -208,12 +221,12 @@ export default function Dashboard() {
                 <p className="text-gray-600 mb-4">
                   Faça login com sua conta do Instagram para ver seu perfil e dados
                 </p>
-                <Link
-                  href="/api/auth/callback/instagram"
-                  className="inline-block px-6 py-3 ml-gradient-secondary ml-hover-secondary text-white rounded-lg transition-colors"
+                <button
+                  onClick={handleInstagramConnect}
+                  className="px-6 py-3 ml-gradient-secondary ml-hover-secondary text-white rounded-lg transition-colors hover:scale-105 transform duration-300"
                 >
                   Conectar Instagram
-                </Link>
+                </button>
               </div>
             </div>
           </div>
