@@ -38,7 +38,7 @@ Este guia detalha como configurar a integração com a Instagram Business API.
 1. Vá para "Instagram API" > "Configurações básicas"
 2. Anote os seguintes valores:
    - **ID do App**: Este será seu `INSTAGRAM_CLIENT_ID`
-   - **Chave secreta do app**: Este será seu `INSTAGRAM_CLIENT_SECRET`
+   - **Chave secreta do app**: Este será seu `NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET`
 
 ### 5. Configure as URLs de Redirecionamento
 
@@ -69,7 +69,7 @@ Crie ou atualize o arquivo `.env.local`:
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=sua-chave-secreta-super-segura-aqui
 INSTAGRAM_CLIENT_ID=seu-id-do-app-instagram-business
-INSTAGRAM_CLIENT_SECRET=sua-chave-secreta-do-app-instagram-business
+NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=sua-chave-secreta-do-app-instagram-business
 INSTAGRAM_API_BASE_URL=https://graph.instagram.com
 ```
 
@@ -126,7 +126,7 @@ openssl rand -base64 32
    NEXTAUTH_URL=https://seu-projeto.vercel.app
    NEXTAUTH_SECRET=sua-chave-secreta-production
    INSTAGRAM_CLIENT_ID=seu-instagram-client-id
-   INSTAGRAM_CLIENT_SECRET=seu-instagram-client-secret
+   NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=seu-instagram-client-secret
    INSTAGRAM_API_BASE_URL=https://graph.instagram.com
    ```
 

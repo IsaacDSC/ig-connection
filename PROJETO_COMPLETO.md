@@ -46,7 +46,7 @@ src/
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=sua-chave-secreta-aqui
 INSTAGRAM_CLIENT_ID=seu-instagram-business-client-id
-INSTAGRAM_CLIENT_SECRET=seu-instagram-business-client-secret
+NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=seu-instagram-business-client-secret
 INSTAGRAM_API_BASE_URL=https://graph.instagram.com
 ```
 

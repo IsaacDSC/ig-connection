@@ -20,7 +20,7 @@ NEXTAUTH_SECRET=sua-chave-secreta-aqui
 
 # Instagram Business API
 NEXT_PUBLIC_INSTAGRAM_CLIENT_ID=742086725267609
-INSTAGRAM_CLIENT_SECRET=seu-client-secret-do-instagram
+NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=seu-client-secret-do-instagram
 
 # URLs de callback
 REDIRECT_URI=http://localhost:3000/api/auth/callback/instagram
@@ -35,7 +35,7 @@ Configure as seguintes variáveis no **Vercel Dashboard** → **Settings** → *
 |----------|-------|-----------|
 | `NEXTAUTH_URL` | `https://seu-dominio.vercel.app` | URL da sua aplicação |
 | `NEXTAUTH_SECRET` | `[chave-gerada]` | Chave secreta gerada |
-| `INSTAGRAM_CLIENT_SECRET` | `[seu-secret]` | Client Secret do Instagram |
+| `NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET` | `[seu-secret]` | Client Secret do Instagram |
 | `REDIRECT_URI` | `https://seu-dominio.vercel.app/api/auth/callback/instagram` | URL de callback |
 | `NEXT_PUBLIC_INSTAGRAM_CLIENT_ID` | `742086725267609` | Client ID público |
 | `NEXT_PUBLIC_REDIRECT_URI` | `https://seu-dominio.vercel.app/api/auth/callback/instagram` | URL de callback público |

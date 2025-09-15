@@ -47,7 +47,7 @@ Este sistema implementa o fluxo OAuth do Instagram para salvar o `userId` e `acc
 
 ```env
 NEXTAUTH_URL=https://seu-dominio.com
-INSTAGRAM_CLIENT_SECRET=seu_client_secret
+NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=seu_client_secret
 ```
 
 ## Como Testar
