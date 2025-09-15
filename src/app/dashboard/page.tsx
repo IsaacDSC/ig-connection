@@ -1,14 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
 import { 
   checkInstagramSession, 
   clearInstagramSession, 
   formatTokenForDisplay,
-  buildInstagramAuthUrl,
-  type InstagramSession 
+  buildInstagramAuthUrl
 } from "@/lib/instagram"
+import { InstagramSession } from "@/types/instagram"
+import { INSTAGRAM_CONFIG, getRedirectUri } from "@/lib/config"
 import { useInstagramProfile } from "@/hooks/useInstagramProfile"
 import InstagramProfileCard from "@/components/InstagramProfileCard"
 import InstagramMediaGrid from "@/components/InstagramMediaGrid"
@@ -25,30 +25,17 @@ export default function Dashboard() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        console.log('🔍 Iniciando verificação de sessão Instagram...')
         setSessionLoading(true)
-        
-        console.log('📡 Fazendo chamada para checkInstagramSession...')
         const sessionData = await checkInstagramSession()
         
-        console.log('📥 Resposta recebida:', sessionData)
-        
         if (sessionData.authenticated && sessionData.data) {
-          console.log('✅ Instagram session found:', {
-            userId: sessionData.data.user_id,
-            tokenPreview: formatTokenForDisplay(sessionData.data.access_token),
-            fullResponse: sessionData
-          })
           setInstagramSession(sessionData.data)
         } else {
-          console.log('❌ Sessão não encontrada ou inválida:', sessionData)
           setSessionError(sessionData.message || 'Sessão do Instagram não encontrada')
         }
-      } catch (error) {
-        console.error('💥 Error checking Instagram session:', error)
+      } catch {
         setSessionError('Erro ao verificar sessão do Instagram')
       } finally {
-        console.log('🏁 Finalizando verificação de sessão')
         setSessionLoading(false)
       }
     }
@@ -73,14 +60,8 @@ export default function Dashboard() {
   }
 
   const handleInstagramConnect = () => {
-    // Configurações do Instagram OAuth
-    const clientId = process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID || "742086725267609"
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI || `${window.location.origin}/api/auth/callback/instagram`
-    
-    // Construir URL de autorização do Instagram
-    const authUrl = buildInstagramAuthUrl(clientId, redirectUri)
-    
-    // Redirecionar para o Instagram
+    const redirectUri = getRedirectUri(window.location.origin)
+    const authUrl = buildInstagramAuthUrl(INSTAGRAM_CONFIG.CLIENT_ID, redirectUri)
     window.location.href = authUrl
   }
 

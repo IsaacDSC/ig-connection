@@ -9,12 +9,8 @@ export default function TestPage() {
   const testSession = async () => {
     setLoading(true)
     try {
-      console.log('🧪 Testando API de sessão...')
-      
       const response = await fetch('/api/instagram/session')
       const data = await response.json()
-      
-      console.log('🧪 Resposta da API:', data)
       setResult(JSON.stringify(data, null, 2))
     } catch (error) {
       console.error('🧪 Erro no teste:', error)
@@ -27,8 +23,6 @@ export default function TestPage() {
   const simulateCallback = async () => {
     setLoading(true)
     try {
-      console.log('🧪 Simulando callback com dados fake...')
-      
       // Simular um redirect direto para testar os cookies
       window.location.href = '/api/auth/callback/instagram?code=fake_code_for_testing&state=test_state'
     } catch (error) {

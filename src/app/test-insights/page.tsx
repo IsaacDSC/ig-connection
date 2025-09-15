@@ -1,7 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import { useInstagramMediaTest, type InstagramMedia } from "@/hooks/useInstagramMediaTest"
+import { useInstagramMediaTest } from "@/hooks/useInstagramMediaTest"
+import { InstagramMedia } from "@/types/instagram"
 
 export default function TestInsightsPage() {
   const { media, loading, error } = useInstagramMediaTest()
@@ -10,21 +11,11 @@ export default function TestInsightsPage() {
     const insight = mediaItem.insights?.data.find(insight => insight.name === metricName)
     const value = insight?.values[0]?.value || 0
     
-    if (value > 0) {
-      console.log(`📈 [Test Page] Métrica ${metricName}:`, value);
-    }
     
     return value
   }
 
   const getDisplayMetrics = (mediaItem: InstagramMedia) => {
-    console.log('🔍 [Test Page] Processando insights para mídia:', {
-      id: mediaItem.id,
-      type: mediaItem.media_type,
-      hasInsights: !!mediaItem.insights,
-      insightsCount: mediaItem.insights?.data?.length || 0,
-      insightsData: mediaItem.insights?.data || 'N/A'
-    });
 
     const metrics = []
     

@@ -1,15 +1,7 @@
-export interface InstagramSession {
-  user_id: string
-  access_token: string
-}
+import { InstagramSession, InstagramSessionResponse } from '@/types/instagram'
+import { INSTAGRAM_CONFIG } from './config'
 
-export interface InstagramSessionResponse {
-  status: 'success' | 'error'
-  message: string
-  authenticated: boolean
-  data?: InstagramSession
-  error?: string
-}
+export type { InstagramSession, InstagramSessionResponse }
 
 /**
  * Verifica se existe uma sessão ativa do Instagram
@@ -64,11 +56,10 @@ export function buildInstagramAuthUrl(
   redirectUri: string,
   state?: string
 ): string {
-  const baseUrl = 'https://www.instagram.com/oauth/authorize'
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,
-    scope: 'instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments,instagram_business_content_publish,instagram_business_manage_insights',
+    scope: INSTAGRAM_CONFIG.SCOPES,
     response_type: 'code',
     force_reauth: 'true'
   })
@@ -77,7 +68,7 @@ export function buildInstagramAuthUrl(
     params.append('state', state)
   }
 
-  return `${baseUrl}?${params.toString()}`
+  return `${INSTAGRAM_CONFIG.BASE_AUTH_URL}?${params.toString()}`
 }
 
 /**

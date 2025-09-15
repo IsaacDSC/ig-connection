@@ -1,21 +1,41 @@
 {
   "name": "ig-connection",
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
   "env": {
     "NEXTAUTH_URL": "@nextauth_url",
     "NEXTAUTH_SECRET": "@nextauth_secret",
-    "INSTAGRAM_CLIENT_ID": "@instagram_client_id",
     "INSTAGRAM_CLIENT_SECRET": "@instagram_client_secret",
-    "INSTAGRAM_API_BASE_URL": "https://graph.instagram.com",
     "REDIRECT_URI": "@redirect_uri",
     "NEXT_PUBLIC_INSTAGRAM_CLIENT_ID": "@next_public_instagram_client_id",
-    "NEXT_PUBLIC_REDIRECT_URI": "@next_public_redirect_uri",
-    "NODE_ENV": "production"
-  }
+    "NEXT_PUBLIC_REDIRECT_URI": "@next_public_redirect_uri"
+  },
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
 }

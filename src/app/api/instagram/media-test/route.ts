@@ -87,7 +87,6 @@ const mockMediaWithInsights = [
 ];
 
 export async function GET() {
-  console.log('🧪 [Test Media API] Retornando dados mock com insights para teste');
   
   return NextResponse.json({
     success: true,

@@ -1,17 +1,19 @@
 "use client"
 
+import { INSTAGRAM_CONFIG, getRedirectUri } from "@/lib/config"
+
 export default function Home() {
   const handleInstagramConnect = () => {
-    const baseURL = "https://www.instagram.com/oauth/authorize"
+    const redirectUri = getRedirectUri(window.location.origin)
     const params = new URLSearchParams({
       force_reauth: "true",
-      client_id: process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID || "742086725267609",
-      redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI || "https://0190ec42c1ca.ngrok-free.app/api/auth/callback/instagram",
+      client_id: INSTAGRAM_CONFIG.CLIENT_ID,
+      redirect_uri: redirectUri,
       response_type: "code",
-      scope: "instagram_business_basic,instagram_business_manage_messages,instagram_business_manage_comments,instagram_business_content_publish,instagram_business_manage_insights"
+      scope: INSTAGRAM_CONFIG.SCOPES
     })
 
-    window.location.href = `${baseURL}?${params.toString()}`
+    window.location.href = `${INSTAGRAM_CONFIG.BASE_AUTH_URL}?${params.toString()}`
   }
 
   return (

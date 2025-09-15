@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import axios from 'axios'
+import { INSTAGRAM_CONFIG, getRedirectUri, getDashboardUrl } from '@/lib/config'
 
 interface TokenResponse {
   access_token: string
@@ -32,9 +33,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Configurações do Instagram
-    const clientId = process.env.INSTAGRAM_CLIENT_ID || process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID || "742086725267609"
+    const clientId = INSTAGRAM_CONFIG.CLIENT_ID
     const clientSecret = process.env.INSTAGRAM_CLIENT_SECRET
-    const redirectUri = process.env.REDIRECT_URI
+    const redirectUri = getRedirectUri()
 
     if(!redirectUri) {
       throw new Error('REDIRECT_URI not configured')
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
     }
 
     // URL para trocar código por token
-    const tokenURL = "https://api.instagram.com/oauth/access_token"
+    const tokenURL = INSTAGRAM_CONFIG.TOKEN_URL
     
     // Preparar dados para a requisição
     const formData = new URLSearchParams()
@@ -112,10 +113,8 @@ export async function GET(request: NextRequest) {
 
     console.log('✅ Cookies salvos com sucesso!')
 
-    // Definir URL do dashboard baseada em NEXTAUTH_URL ou fallback
-    const dashboardUrl = process.env.NEXTAUTH_URL 
-      ? `${process.env.NEXTAUTH_URL}/dashboard`
-      : `${new URL(request.url).origin}/dashboard`
+    // Definir URL do dashboard
+    const dashboardUrl = getDashboardUrl(new URL(request.url).origin)
 
     console.log('🔄 Redirecting to dashboard:', dashboardUrl)
 

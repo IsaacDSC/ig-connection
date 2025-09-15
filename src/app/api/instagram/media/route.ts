@@ -1,36 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
-
-interface InstagramMedia {
-  id: string;
-  media_type: string;
-  media_url: string;
-  thumbnail_url?: string;
-  permalink: string;
-  caption?: string;
-  timestamp: string;
-  insights?: {
-    data: Array<{
-      name: string;
-      values: Array<{ value: number }>;
-    }>;
-  };
-  insightsError?: {
-    reason: string;
-    message: string;
-    details?: string;
-  };
-}
-
-interface RawInstagramMedia {
-  id: string;
-  media_type: string;
-  media_url: string;
-  thumbnail_url?: string;
-  permalink: string;
-  caption?: string;
-  timestamp: string;
-}
+import { InstagramMedia, RawInstagramMedia } from '@/types/instagram';
+import { INSTAGRAM_CONFIG } from '@/lib/config';
 
 export async function GET(request: NextRequest) {
   try {
@@ -64,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     // Primeiro, verificar o tipo de conta para diagnosticar problemas com insights
     try {
-      const accountInfoURL = `https://graph.instagram.com/me?fields=account_type&access_token=${accessToken}`;
+      const accountInfoURL = `${INSTAGRAM_CONFIG.GRAPH_API_URL}/me?fields=account_type&access_token=${accessToken}`;
       const accountResponse = await axios.get(accountInfoURL);
       
       if (accountResponse.status === 200) {
@@ -80,7 +51,7 @@ export async function GET(request: NextRequest) {
     }
 
     // URL da API do Instagram Graph para buscar mídia do usuário
-    const mediaURL = `https://graph.instagram.com/me/media?fields=id,media_type,media_url,thumbnail_url,permalink,caption,timestamp&limit=${limit}&access_token=${accessToken}`;
+    const mediaURL = `${INSTAGRAM_CONFIG.GRAPH_API_URL}/me/media?fields=id,media_type,media_url,thumbnail_url,permalink,caption,timestamp&limit=${limit}&access_token=${accessToken}`;
 
     console.log('🔍 [Media API] Buscando mídia do Instagram para user:', userIdCookie.value);
 
@@ -145,7 +116,7 @@ export async function GET(request: NextRequest) {
             console.log(`🔍 [Media API] Tentando buscar métrica principal: ${insightsFields.join(', ')}`);
 
             // Tentar buscar insights primeiro com uma métrica básica
-            const insightsURL = `https://graph.instagram.com/${media.id}/insights?metric=${insightsFields.join(',')}&access_token=${accessToken}`;
+            const insightsURL = `${INSTAGRAM_CONFIG.GRAPH_API_URL}/${media.id}/insights?metric=${insightsFields.join(',')}&access_token=${accessToken}`;
             
             try {
               const insightsResponse = await axios.get(insightsURL);
@@ -162,7 +133,7 @@ export async function GET(request: NextRequest) {
                 if (insights.data && insights.data.length > 0) {
                   try {
                     const engagementFields = ['likes', 'comments', 'shares', 'saved'];
-                    const engagementURL = `https://graph.instagram.com/${media.id}/insights?metric=${engagementFields.join(',')}&access_token=${accessToken}`;
+                    const engagementURL = `${INSTAGRAM_CONFIG.GRAPH_API_URL}/${media.id}/insights?metric=${engagementFields.join(',')}&access_token=${accessToken}`;
                     const engagementResponse = await axios.get(engagementURL);
                     
                     if (engagementResponse.status === 200 && engagementResponse.data.data) {

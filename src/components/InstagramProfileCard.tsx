@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { InstagramProfile } from '@/hooks/useInstagramProfile';
+import { InstagramProfile } from '@/types/instagram';
 
 interface InstagramProfileCardProps {
   profile: InstagramProfile;

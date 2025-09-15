@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { useInstagramMedia, type InstagramMedia } from "@/hooks/useInstagramMedia"
+import { useInstagramMedia } from "@/hooks/useInstagramMedia"
+import { InstagramMedia } from "@/types/instagram"
 
 interface InstagramMediaGridProps {
   initialVisibleCount?: number
