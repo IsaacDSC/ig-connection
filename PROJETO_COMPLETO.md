@@ -43,7 +43,7 @@ src/
 
 ### 1. Variáveis de Ambiente (.env.local)
 ```env
-NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_AUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=sua-chave-secreta-aqui
 INSTAGRAM_CLIENT_ID=seu-instagram-business-client-id
 NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=seu-instagram-business-client-secret

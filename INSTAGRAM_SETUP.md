@@ -66,7 +66,7 @@ Este guia detalha como configurar a integração com a Instagram Business API.
 Crie ou atualize o arquivo `.env.local`:
 
 ```env
-NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_AUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=sua-chave-secreta-super-segura-aqui
 INSTAGRAM_CLIENT_ID=seu-id-do-app-instagram-business
 NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=sua-chave-secreta-do-app-instagram-business
@@ -81,7 +81,7 @@ INSTAGRAM_API_BASE_URL=https://graph.instagram.com
 
 ### Erro: "Invalid redirect URI"
 - Verifique se a URL de callback está correta no painel do Facebook
-- Confirme se a `NEXTAUTH_URL` está configurada corretamente
+- Confirme se a `NEXT_PUBLIC_AUTH_URL` está configurada corretamente
 
 ### Erro: "App not approved for login"
 - O app está em modo de desenvolvimento
@@ -123,7 +123,7 @@ openssl rand -base64 32
 
 1. Configure as variáveis de ambiente na Vercel:
    ```
-   NEXTAUTH_URL=https://seu-projeto.vercel.app
+   NEXT_PUBLIC_AUTH_URL=https://seu-projeto.vercel.app
    NEXTAUTH_SECRET=sua-chave-secreta-production
    INSTAGRAM_CLIENT_ID=seu-instagram-client-id
    NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=seu-instagram-client-secret

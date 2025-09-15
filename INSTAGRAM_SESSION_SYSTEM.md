@@ -12,7 +12,7 @@ Este sistema implementa o fluxo OAuth do Instagram para salvar o `userId` e `acc
 - **Salva os dados nos cookies HTTP-only:**
   - `instagram_access_token`: Token de acesso
   - `instagram_user_id`: ID do usuário
-- **Redireciona automaticamente para:** `NEXTAUTH_URL/dashboard` ou `/dashboard`
+- **Redireciona automaticamente para:** `NEXT_PUBLIC_AUTH_URL/dashboard` ou `/dashboard`
 
 ### 2. API de Sessão (`/api/instagram/session/route.ts`)
 - **GET**: Recupera dados da sessão dos cookies
@@ -46,7 +46,7 @@ Este sistema implementa o fluxo OAuth do Instagram para salvar o `userId` e `acc
 ## Variáveis de Ambiente
 
 ```env
-NEXTAUTH_URL=https://seu-dominio.com
+NEXT_PUBLIC_AUTH_URL=https://seu-dominio.com
 NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET=seu_client_secret
 ```
 

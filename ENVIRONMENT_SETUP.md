@@ -13,7 +13,7 @@
 
 ```env
 # URL base da aplicação
-NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_AUTH_URL=http://localhost:3000
 
 # Chave secreta para NextAuth
 NEXTAUTH_SECRET=sua-chave-secreta-aqui
@@ -33,7 +33,7 @@ Configure as seguintes variáveis no **Vercel Dashboard** → **Settings** → *
 
 | Variável | Valor | Descrição |
 |----------|-------|-----------|
-| `NEXTAUTH_URL` | `https://seu-dominio.vercel.app` | URL da sua aplicação |
+| `NEXT_PUBLIC_AUTH_URL` | `https://seu-dominio.vercel.app` | URL da sua aplicação |
 | `NEXTAUTH_SECRET` | `[chave-gerada]` | Chave secreta gerada |
 | `NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET` | `[seu-secret]` | Client Secret do Instagram |
 | `REDIRECT_URI` | `https://seu-dominio.vercel.app/api/auth/callback/instagram` | URL de callback |

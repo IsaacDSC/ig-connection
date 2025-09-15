@@ -17,7 +17,7 @@ export const getRedirectUri = (origin?: string) => {
 };
 
 export const getDashboardUrl = (origin?: string) => {
-  return process.env.NEXTAUTH_URL
-    ? `${process.env.NEXTAUTH_URL}/dashboard`
+  return process.env.NEXT_PUBLIC_AUTH_URL
+    ? `${process.env.NEXT_PUBLIC_AUTH_URL}/dashboard`
     : `${origin}/dashboard`;
 };
