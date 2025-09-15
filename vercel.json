@@ -1,0 +1,17 @@
+{
+  "name": "ig-connection",
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "env": {
+    "NEXTAUTH_URL": "@nextauth_url",
+    "NEXTAUTH_SECRET": "@nextauth_secret",
+    "INSTAGRAM_CLIENT_ID": "@instagram_client_id",
+    "INSTAGRAM_CLIENT_SECRET": "@instagram_client_secret",
+    "INSTAGRAM_API_BASE_URL": "https://graph.instagram.com"
+  }
+}
