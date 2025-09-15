@@ -15,6 +15,11 @@ export interface InstagramMedia {
       values: Array<{ value: number }>;
     }>;
   };
+  insightsError?: {
+    reason: string;
+    message: string;
+    details?: string;
+  };
 }
 
 interface InstagramMediaResponse {

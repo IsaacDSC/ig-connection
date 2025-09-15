@@ -22,35 +22,58 @@ export default function InstagramMediaGrid({ initialVisibleCount = 6 }: Instagra
 
   const getInsightValue = (mediaItem: InstagramMedia, metricName: string) => {
     const insight = mediaItem.insights?.data.find(insight => insight.name === metricName)
-    return insight?.values[0]?.value || 0
+    const value = insight?.values[0]?.value || 0
+    return value
   }
 
   const getDisplayMetrics = (mediaItem: InstagramMedia) => {
     const metrics = []
     
+    // Métricas comuns para todos os tipos
+    const likes = getInsightValue(mediaItem, 'likes')
+    const comments = getInsightValue(mediaItem, 'comments')
+    const shares = getInsightValue(mediaItem, 'shares')
+    const saved = getInsightValue(mediaItem, 'saved')
+    
     if (mediaItem.media_type === 'VIDEO') {
-      metrics.push(
-        { label: 'Visualizações', value: getInsightValue(mediaItem, 'video_views') },
-        { label: 'Impressões', value: getInsightValue(mediaItem, 'impressions') },
-        { label: 'Alcance', value: getInsightValue(mediaItem, 'reach') },
-        { label: 'Engagement', value: getInsightValue(mediaItem, 'engagement') }
-      )
+      const views = getInsightValue(mediaItem, 'video_views')
+      const impressions = getInsightValue(mediaItem, 'impressions')
+      const reach = getInsightValue(mediaItem, 'reach')
+      
+      if (views > 0) metrics.push({ label: 'Visualizações', value: views })
+      if (impressions > 0) metrics.push({ label: 'Impressões', value: impressions })
+      if (reach > 0) metrics.push({ label: 'Alcance', value: reach })
+      if (likes > 0) metrics.push({ label: 'Curtidas', value: likes })
+      if (comments > 0) metrics.push({ label: 'Comentários', value: comments })
+      if (shares > 0) metrics.push({ label: 'Compartilhamentos', value: shares })
+      if (saved > 0) metrics.push({ label: 'Salvos', value: saved })
+      
     } else if (mediaItem.media_type === 'REELS') {
-      metrics.push(
-        { label: 'Reproduções', value: getInsightValue(mediaItem, 'plays') },
-        { label: 'Alcance', value: getInsightValue(mediaItem, 'reach') },
-        { label: 'Impressões', value: getInsightValue(mediaItem, 'impressions') },
-        { label: 'Interações', value: getInsightValue(mediaItem, 'total_interactions') }
-      )
+      const plays = getInsightValue(mediaItem, 'plays')
+      const reach = getInsightValue(mediaItem, 'reach')
+      const impressions = getInsightValue(mediaItem, 'impressions')
+      
+      if (plays > 0) metrics.push({ label: 'Reproduções', value: plays })
+      if (reach > 0) metrics.push({ label: 'Alcance', value: reach })
+      if (impressions > 0) metrics.push({ label: 'Impressões', value: impressions })
+      if (likes > 0) metrics.push({ label: 'Curtidas', value: likes })
+      if (comments > 0) metrics.push({ label: 'Comentários', value: comments })
+      if (shares > 0) metrics.push({ label: 'Compartilhamentos', value: shares })
+      if (saved > 0) metrics.push({ label: 'Salvos', value: saved })
+      
     } else if (mediaItem.media_type === 'CAROUSEL_ALBUM') {
-      metrics.push(
-        { label: 'Impressões', value: getInsightValue(mediaItem, 'impressions') },
-        { label: 'Alcance', value: getInsightValue(mediaItem, 'reach') },
-        { label: 'Engagement', value: getInsightValue(mediaItem, 'engagement') }
-      )
+      const impressions = getInsightValue(mediaItem, 'impressions')
+      const reach = getInsightValue(mediaItem, 'reach')
+      
+      if (impressions > 0) metrics.push({ label: 'Impressões', value: impressions })
+      if (reach > 0) metrics.push({ label: 'Alcance', value: reach })
+      if (likes > 0) metrics.push({ label: 'Curtidas', value: likes })
+      if (comments > 0) metrics.push({ label: 'Comentários', value: comments })
+      if (shares > 0) metrics.push({ label: 'Compartilhamentos', value: shares })
+      if (saved > 0) metrics.push({ label: 'Salvos', value: saved })
     }
     
-    return metrics.filter(metric => metric.value > 0)
+    return metrics
   }
 
   const handleLoadMore = () => {
@@ -214,13 +237,61 @@ export default function InstagramMediaGrid({ initialVisibleCount = 6 }: Instagra
               
               {/* Insights */}
               {mediaItem.insights && (
-                <div className="space-y-2 mb-4">
-                  {getDisplayMetrics(mediaItem).map((metric, index) => (
-                    <div key={index} className="flex justify-between text-sm">
-                      <span className="text-gray-600">{metric.label}:</span>
-                      <span className="font-semibold">{metric.value.toLocaleString()}</span>
+                <div className="mb-4">
+                  {getDisplayMetrics(mediaItem).length > 0 ? (
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-2">Insights</h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {getDisplayMetrics(mediaItem).map((metric, index) => (
+                          <div key={index} className="flex flex-col">
+                            <span className="text-xs text-gray-600">{metric.label}</span>
+                            <span className="text-sm font-semibold text-gray-900">{metric.value.toLocaleString()}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                  ) : (
+                    <div className="text-xs text-gray-500 italic">
+                      Insights não disponíveis para este post
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Mensagem de erro dos insights */}
+              {!mediaItem.insights && mediaItem.insightsError && (
+                <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0">
+                      <svg className="w-4 h-4 text-gray-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="ml-2 flex-1">
+                      <h5 className="text-sm font-medium text-gray-700">
+                        {mediaItem.insightsError.message}
+                      </h5>
+                      {mediaItem.insightsError.details && (
+                        <p className="text-xs text-gray-600 mt-1">
+                          {mediaItem.insightsError.details}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Se não tem insights nem erro, mostrar mensagem padrão */}
+              {!mediaItem.insights && !mediaItem.insightsError && (
+                <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div className="flex items-center">
+                    <svg className="w-4 h-4 text-gray-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-xs text-gray-600">
+                      Insights não disponíveis
+                    </span>
+                  </div>
                 </div>
               )}
 
