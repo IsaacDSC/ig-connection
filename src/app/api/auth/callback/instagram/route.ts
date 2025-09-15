@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 import axios from 'axios'
 
 interface TokenResponse {
@@ -81,18 +82,41 @@ export async function GET(request: NextRequest) {
       access_token: response.data.access_token,
       user_id: response.data.user_id
     })
+
+    // Salvar dados nos cookies de forma segura
+    console.log('🍪 Iniciando salvamento dos cookies...')
+    const cookieStore = await cookies()
     
-    return NextResponse.json(
-      { 
-        status: "success",
-        message: "Instagram authorization successful",
-        data: {
-          access_token: response.data.access_token,
-          user_id: response.data.user_id
-        }
-      },
-      { status: 200 }
-    )
+    // Configurar cookies com dados do Instagram
+    console.log('🍪 Salvando instagram_access_token...')
+    cookieStore.set('instagram_access_token', response.data.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 60, // 60 dias
+      path: '/'
+    })
+    
+    console.log('🍪 Salvando instagram_user_id...')
+    cookieStore.set('instagram_user_id', response.data.user_id.toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 60, // 60 dias
+      path: '/'
+    })
+
+    console.log('✅ Cookies salvos com sucesso!')
+
+    // Definir URL do dashboard baseada em NEXTAUTH_URL ou fallback
+    const dashboardUrl = process.env.NEXTAUTH_URL 
+      ? `${process.env.NEXTAUTH_URL}/dashboard`
+      : `${new URL(request.url).origin}/dashboard`
+
+    console.log('🔄 Redirecting to dashboard:', dashboardUrl)
+
+    // Redirecionar para o dashboard
+    return NextResponse.redirect(dashboardUrl)
   } catch (error) {
     console.error('❌ Error in Instagram callback:', error)
     

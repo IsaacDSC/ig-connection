@@ -1,8 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { mockProfile, mockVideos } from "@/lib/mockData"
+import { 
+  checkInstagramSession, 
+  clearInstagramSession, 
+  formatTokenForDisplay,
+  type InstagramSession 
+} from "@/lib/instagram"
 
 interface InstagramVideo {
   id: string
@@ -24,6 +30,60 @@ export default function Dashboard() {
   const [videos] = useState<InstagramVideo[]>(mockVideos)
   const [visibleVideos, setVisibleVideos] = useState(6)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [instagramSession, setInstagramSession] = useState<InstagramSession | null>(null)
+  const [sessionLoading, setSessionLoading] = useState(true)
+  const [sessionError, setSessionError] = useState<string | null>(null)
+
+  // Verificar sessão do Instagram
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        console.log('🔍 Iniciando verificação de sessão Instagram...')
+        setSessionLoading(true)
+        
+        console.log('📡 Fazendo chamada para checkInstagramSession...')
+        const sessionData = await checkInstagramSession()
+        
+        console.log('📥 Resposta recebida:', sessionData)
+        
+        if (sessionData.authenticated && sessionData.data) {
+          console.log('✅ Instagram session found:', {
+            userId: sessionData.data.user_id,
+            tokenPreview: formatTokenForDisplay(sessionData.data.access_token),
+            fullResponse: sessionData
+          })
+          setInstagramSession(sessionData.data)
+        } else {
+          console.log('❌ Sessão não encontrada ou inválida:', sessionData)
+          setSessionError(sessionData.message || 'Sessão do Instagram não encontrada')
+        }
+      } catch (error) {
+        console.error('💥 Error checking Instagram session:', error)
+        setSessionError('Erro ao verificar sessão do Instagram')
+      } finally {
+        console.log('🏁 Finalizando verificação de sessão')
+        setSessionLoading(false)
+      }
+    }
+
+    checkSession()
+  }, [])
+
+  const handleClearSession = async () => {
+    try {
+      const result = await clearInstagramSession()
+      
+      if (result.status === 'success') {
+        setInstagramSession(null)
+        setSessionError('Sessão removida com sucesso')
+      } else {
+        setSessionError(result.message || 'Erro ao remover sessão')
+      }
+    } catch (error) {
+      console.error('Error clearing session:', error)
+      setSessionError('Erro ao remover sessão')
+    }
+  }
 
   const loadMoreVideos = () => {
     setLoadingMore(true)
@@ -68,14 +128,69 @@ export default function Dashboard() {
               </div>
               <h1 className="text-xl font-bold text-gray-900">Instagram Dashboard</h1>
             </div>
-            <div className="text-sm text-gray-600">
-              Modo Demonstração
+            <div className="flex items-center space-x-4">
+              {/* Status da Sessão Instagram */}
+              {sessionLoading ? (
+                <div className="text-sm text-gray-600">
+                  Verificando sessão...
+                </div>
+              ) : instagramSession ? (
+                <div className="flex items-center space-x-4">
+                  <div className="text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                    ✓ Conectado ao Instagram
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    User ID: {instagramSession.user_id}
+                  </div>
+                  <button
+                    onClick={handleClearSession}
+                    className="text-xs text-red-600 hover:text-red-800 underline"
+                  >
+                    Desconectar
+                  </button>
+                </div>
+              ) : (
+                <div className="text-sm text-red-600 bg-red-50 px-3 py-1 rounded-full">
+                  {sessionError || "Não conectado"}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Instagram Session Info */}
+        {instagramSession && (
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8 border border-green-200">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <svg
+                className="w-5 h-5 text-green-600 mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              Sessão Instagram Ativa
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <span className="text-sm font-medium text-gray-600">User ID:</span>
+                <p className="text-lg font-mono text-gray-900">{instagramSession.user_id}</p>
+              </div>
+              <div>
+                <span className="text-sm font-medium text-gray-600">Access Token:</span>
+                <p className="text-sm font-mono text-gray-700 break-all">
+                  {formatTokenForDisplay(instagramSession.access_token, 30)}
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 text-xs text-gray-500">
+              ✓ Token salvo com segurança nos cookies HTTP-only
+            </div>
+          </div>
+        )}
+
         {/* Profile Info */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex items-center space-x-6">
