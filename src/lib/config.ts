@@ -17,5 +17,5 @@ export const getRedirectUri = (origin?: string) => {
 };
 
 export const getDashboardUrl = () => {
-  return `${process.env.NEXT_PUBLIC_INSTAGRAM_API_BASE_URL}/dashboard`
+  return `${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard`
 };
