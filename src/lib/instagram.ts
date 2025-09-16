@@ -71,13 +71,3 @@ export function buildInstagramAuthUrl(
 
   return `${INSTAGRAM_CONFIG.BASE_AUTH_URL}?${params.toString()}`
 }
-
-/**
- * Formata token para exibição (mantém apenas os primeiros caracteres)
- */
-export function formatTokenForDisplay(token: string, visibleChars: number = 20): string {
-  if (!token) return ''
-  return token.length > visibleChars 
-    ? `${token.substring(0, visibleChars)}...`
-    : token
-}
