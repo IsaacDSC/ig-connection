@@ -14,14 +14,14 @@ export async function GET(request: NextRequest) {
       hasUserIdCookie: !!userIdCookie,
       hasAccessTokenCookie: !!accessTokenCookie,
       userIdValue: userIdCookie?.value,
-      accessTokenPreview: accessTokenCookie?.value ? 
+      accessTokenPreview: accessTokenCookie?.value ?
         `${accessTokenCookie.value.substring(0, 20)}...` : 'N/A'
     });
 
     if (!userIdCookie || !accessTokenCookie) {
       console.log('❌ [Media API] Cookies de sessão Instagram não encontrados');
       return NextResponse.json(
-        { 
+        {
           error: 'Sessão Instagram não encontrada',
           message: 'Você precisa estar logado no Instagram para acessar este recurso'
         },
@@ -37,11 +37,11 @@ export async function GET(request: NextRequest) {
     try {
       const accountInfoURL = `${INSTAGRAM_CONFIG.GRAPH_API_URL}/me?fields=account_type&access_token=${accessToken}`;
       const accountResponse = await axios.get(accountInfoURL);
-      
+
       if (accountResponse.status === 200) {
         const accountType = accountResponse.data.account_type;
         console.log(`🏢 [Media API] Tipo de conta detectado: ${accountType}`);
-        
+
         if (accountType === 'PERSONAL') {
           console.warn(`⚠️ [Media API] Conta PESSOAL detectada - insights podem ter limitações`);
         }
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     if (mediaResponse.status !== 200) {
       console.error('❌ [Media API] Erro na API do Instagram:', mediaResponse.status, mediaResponse.data);
       return NextResponse.json(
-        { 
+        {
           error: 'Erro da API do Instagram',
           message: 'Falha ao buscar dados de mídia'
         },
@@ -80,17 +80,17 @@ export async function GET(request: NextRequest) {
       mediaData.data.map(async (media: RawInstagramMedia) => {
         let insights = undefined;
         let insightsError = undefined;
-        
+
         // Apenas buscar insights para vídeos, reels e carousels
         if (['VIDEO', 'REELS', 'CAROUSEL_ALBUM', 'IMAGE'].includes(media.media_type)) {
           try {
             console.log(`📊 [Media API] Buscando insights para mídia ${media.id} (${media.media_type})`);
-            
+
             // Verificar se é um post muito recente (últimas 24h) - insights podem não estar disponíveis
             const mediaDate = new Date(media.timestamp);
             const now = new Date();
             const hoursDiff = (now.getTime() - mediaDate.getTime()) / (1000 * 60 * 60);
-            
+
             if (hoursDiff < 24) {
               console.warn(`⏰ [Media API] Post ${media.id} é muito recente (${hoursDiff.toFixed(1)}h) - insights podem não estar disponíveis`);
               insightsError = {
@@ -100,27 +100,22 @@ export async function GET(request: NextRequest) {
               };
             }
             
-            // Campos de insights específicos baseados no tipo de mídia
-            let insightsFields: string[] = [];
-            if (media.media_type === 'VIDEO') {
-              // Para vídeos, começar apenas com a métrica mais básica
-              insightsFields = ['video_views'];
-            } else if (media.media_type === 'REELS') {
-              insightsFields = ['plays'];
-            } else if (media.media_type === 'CAROUSEL_ALBUM') {
-              insightsFields = ['impressions'];
-            } else if (media.media_type === 'IMAGE') {
-              insightsFields = ['impressions'];
-            }
+            const insightsFields = [
+              "likes",
+              "saved",
+              "shares",
+              "comments",
+              "views"
+            ];
 
             console.log(`🔍 [Media API] Tentando buscar métrica principal: ${insightsFields.join(', ')}`);
 
             // Tentar buscar insights primeiro com uma métrica básica
             const insightsURL = `${INSTAGRAM_CONFIG.GRAPH_API_URL}/${media.id}/insights?metric=${insightsFields.join(',')}&access_token=${accessToken}`;
-            
+
             try {
               const insightsResponse = await axios.get(insightsURL);
-              
+
               if (insightsResponse.status === 200) {
                 insights = insightsResponse.data;
                 insightsError = undefined; // Limpar erro se sucesso
@@ -129,31 +124,6 @@ export async function GET(request: NextRequest) {
                   metrics: insights.data?.map((i: { name: string }) => i.name) || []
                 });
 
-                // Agora tentar buscar métricas de engagement adicionais
-                if (insights.data && insights.data.length > 0) {
-                  try {
-                    const engagementFields = ['likes', 'comments', 'shares', 'saved'];
-                    const engagementURL = `${INSTAGRAM_CONFIG.GRAPH_API_URL}/${media.id}/insights?metric=${engagementFields.join(',')}&access_token=${accessToken}`;
-                    const engagementResponse = await axios.get(engagementURL);
-                    
-                    if (engagementResponse.status === 200 && engagementResponse.data.data) {
-                      // Combinar os insights
-                      insights.data = [...insights.data, ...engagementResponse.data.data];
-                      console.log(`🎯 [Media API] Métricas de engagement adicionadas para ${media.id}:`, {
-                        totalFinal: insights.data.length,
-                        allMetrics: insights.data.map((i: { name: string }) => i.name)
-                      });
-                    }
-                  } catch (engagementError) {
-                    console.warn(`⚠️ [Media API] Erro ao buscar métricas de engagement para ${media.id}:`, {
-                      error: axios.isAxiosError(engagementError) ? {
-                        status: engagementError.response?.status,
-                        statusText: engagementError.response?.statusText,
-                        data: engagementError.response?.data
-                      } : engagementError
-                    });
-                  }
-                }
               }
             } catch (basicInsightsError) {
               console.error(`❌ [Media API] Erro com métricas básicas para ${media.id}:`, {
@@ -164,12 +134,12 @@ export async function GET(request: NextRequest) {
                   url: basicInsightsError.config?.url
                 } : basicInsightsError
               });
-              
+
               // Determinar a razão do erro
               if (axios.isAxiosError(basicInsightsError)) {
                 const status = basicInsightsError.response?.status;
                 const errorData = basicInsightsError.response?.data;
-                
+
                 if (status === 400) {
                   if (errorData?.error?.message?.includes('Unsupported get request')) {
                     insightsError = {
@@ -210,7 +180,7 @@ export async function GET(request: NextRequest) {
                   details: 'Erro inesperado ao buscar insights.'
                 };
               }
-              
+
               console.log(`ℹ️ [Media API] Insights não disponíveis para ${media.id}: ${insightsError.message}`);
             }
           } catch (generalError) {
@@ -255,7 +225,7 @@ export async function GET(request: NextRequest) {
     // Verificar se é erro de autenticação/token inválido
     if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 400)) {
       return NextResponse.json(
-        { 
+        {
           error: 'Token de acesso inválido ou expirado',
           message: 'Faça login novamente no Instagram'
         },
@@ -265,7 +235,7 @@ export async function GET(request: NextRequest) {
 
     // Erro genérico
     return NextResponse.json(
-      { 
+      {
         error: 'Erro interno do servidor',
         message: 'Falha ao processar requisição de mídia Instagram'
       },
