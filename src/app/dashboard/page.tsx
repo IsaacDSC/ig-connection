@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import {
   checkInstagramSession,
   clearInstagramSession,
@@ -13,6 +14,7 @@ import InstagramProfileCard from "@/components/InstagramProfileCard"
 import InstagramMediaGrid from "@/components/InstagramMediaGrid"
 
 export default function Dashboard() {
+  const router = useRouter()
   const [instagramSession, setInstagramSession] = useState<InstagramSession | null>(null)
   const [sessionLoading, setSessionLoading] = useState(true)
   const [sessionError, setSessionError] = useState<string | null>(null)
@@ -47,6 +49,8 @@ export default function Dashboard() {
       if (result.status === 'success') {
         setInstagramSession(null)
         setSessionError('Sessão removida com sucesso')
+        // Redirect para a página inicial após logout
+        router.push('/')
       } else {
         setSessionError(result.message || 'Erro ao remover sessão')
       }
