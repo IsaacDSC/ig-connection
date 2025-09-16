@@ -24,7 +24,7 @@ export default function InstagramProfileCard({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8 mt-8">
       {/* Header */}
       <div className="ml-gradient-secondary px-6 py-4">
         <div className="flex items-center justify-between">
